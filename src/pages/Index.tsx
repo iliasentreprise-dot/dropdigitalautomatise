@@ -186,7 +186,7 @@ const Index = () => {
           <div className="urgency-progress"><div className="urgency-fill" style={{ width: '75%' }}></div></div>
           <div className="urgency-labels"><span style={{ color: '#a78bfa' }}>17 places prises</span><span style={{ color: '#e8110a' }}>3 places restantes</span></div>
         </div>
-        <a href="#acces" onClick={scrollToAcces} className="btn-cta">☠️ OUI — JE VEUX LA MÉTHODE PIRATE MAINTENANT</a>
+        <a href="/orderbump" onClick={goOrderbump} className="btn-cta">☠️ OUI — JE VEUX LA MÉTHODE PIRATE MAINTENANT</a>
         <span className="warning-text">⚠️ Cette offre disparaît dès la fin du live</span>
         <span className="btn-sub">Accès immédiat · Paiement sécurisé · Garanti ou remboursé</span>
       </section>
@@ -308,7 +308,7 @@ const Index = () => {
             <div className="urgency-progress"><div className="urgency-fill" style={{ width: '75%' }}></div></div>
             <div className="urgency-labels"><span style={{ color: '#a78bfa' }}>17 places prises</span><span style={{ color: '#e8110a' }}>3 places restantes</span></div>
           </div>
-          <a href="#acces" onClick={scrollToAcces} className="btn-cta" style={{ fontSize: 'clamp(18px,3.5vw,30px)', marginTop: 10 }}>☠️ OUI — JE VEUX LA MÉTHODE PIRATE MAINTENANT</a>
+          <a href="/orderbump" onClick={goOrderbump} className="btn-cta" style={{ fontSize: 'clamp(18px,3.5vw,30px)', marginTop: 10 }}>☠️ OUI — JE VEUX LA MÉTHODE PIRATE MAINTENANT</a>
           <span className="warning-text">⚠️ Cette offre disparaît dès la fin du live</span>
         </div>
       </div>
@@ -329,7 +329,7 @@ const Index = () => {
           <div className="urgency-progress"><div className="urgency-fill" style={{ width: '75%' }}></div></div>
           <div className="urgency-labels"><span style={{ color: '#a78bfa' }}>17 places prises</span><span style={{ color: '#e8110a' }}>3 places restantes</span></div>
         </div>
-        <a href="#acces" onClick={scrollToAcces} className="btn-cta">☠️ OUI — JE VEUX LA MÉTHODE PIRATE MAINTENANT</a>
+        <a href="/orderbump" onClick={goOrderbump} className="btn-cta">☠️ OUI — JE VEUX LA MÉTHODE PIRATE MAINTENANT</a>
         <span className="warning-text">⚠️ Cette offre disparaît dès la fin du live</span>
         <span className="btn-sub">Accès immédiat après paiement · 100% sécurisé</span>
       </div>
@@ -368,7 +368,7 @@ const Index = () => {
           <div className="urgency-progress"><div className="urgency-fill" style={{ width: '75%' }}></div></div>
           <div className="urgency-labels"><span style={{ color: '#a78bfa' }}>17 places prises</span><span style={{ color: '#e8110a' }}>3 places restantes</span></div>
         </div>
-        <a href="#acces" onClick={scrollToAcces} className="btn-cta" style={{ fontSize: 'clamp(22px,4vw,36px)' }}>☠️ OUI — JE VEUX LA MÉTHODE PIRATE MAINTENANT</a>
+        <a href="/orderbump" onClick={goOrderbump} className="btn-cta" style={{ fontSize: 'clamp(22px,4vw,36px)' }}>☠️ OUI — JE VEUX LA MÉTHODE PIRATE MAINTENANT</a>
         <span className="warning-text">⚠️ Cette offre disparaît dès la fin du live</span>
       </div>
 
