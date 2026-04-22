@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import avis1 from "@/assets/avis-1.jpeg";
 import avis2 from "@/assets/avis-2.png";
 import avis3 from "@/assets/avis-3.png";
@@ -9,6 +10,7 @@ import mockup from "@/assets/mockup-systeme-pirate.png";
 import logo from "@/assets/logo-drop-digital.png";
 
 const Index = () => {
+  const navigate = useNavigate();
   useEffect(() => {
     // Inject styles
     const styleId = "systeme-pirate-styles";
@@ -115,6 +117,9 @@ const Index = () => {
         @media (max-width: 768px) { .social-proof-notif { top: 90px; right: 10px; width: 220px; min-width: auto; padding: 12px 16px; } .social-proof-notif .notif-text { font-size: 13px; } }
         .module-glow { background:rgba(124,58,237,0.05); border:1px solid #7c3aed; box-shadow:0 0 20px rgba(124,58,237,0.4),0 0 40px rgba(124,58,237,0.15),inset 0 0 20px rgba(124,58,237,0.03); padding:24px; transition:box-shadow 0.3s ease; }
         .module-glow:hover { box-shadow:0 0 30px rgba(124,58,237,0.7),0 0 60px rgba(124,58,237,0.3),inset 0 0 30px rgba(124,58,237,0.05); }
+        .floating-logo { width: 180px; height: 180px; border-radius: 24px; box-shadow: 0 0 40px rgba(124,58,237,0.7), 0 0 80px rgba(124,58,237,0.3); animation: logo-float 3.5s ease-in-out infinite; object-fit: contain; background: rgba(124,58,237,0.05); padding: 8px; }
+        @keyframes logo-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+        @media (max-width: 600px) { .floating-logo { width: 140px; height: 140px; } }
       `;
       document.head.appendChild(style);
     }
@@ -144,11 +149,16 @@ const Index = () => {
     document.getElementById('acces')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const goOrderbump = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate('/orderbump');
+  };
+
   return (
     <div className="sp-page">
       <div className="fixed-nav-wrapper">
-        <a href="#acces" className="fixed-btn-left" onClick={scrollToAcces}>Réserver mon accès</a>
-        <a href="#acces" className="fixed-btn-right" onClick={scrollToAcces}>
+        <a href="/orderbump" className="fixed-btn-left" onClick={goOrderbump}>Réserver mon accès</a>
+        <a href="/orderbump" className="fixed-btn-right" onClick={goOrderbump}>
           <span className="live-dot"></span>
           <span>Offre exclusif Live</span>
           <span className="badge-red">-600€</span>
@@ -156,8 +166,8 @@ const Index = () => {
       </div>
 
       <section className="hero">
-        <div style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-          <img src={logo} alt="Drop Digital" style={{ width: 90, height: 90, borderRadius: 16, boxShadow: '0 0 30px rgba(124,58,237,0.6)' }} />
+        <div style={{ marginBottom: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+          <img src={logo} alt="Drop Digital" className="floating-logo" />
         </div>
         <div className="badge-top">⚓ MÉTHODE INTERDITE — LES AUTRES NE VEULENT PAS QUE VOUS VOYIEZ ÇA ⚓</div>
         <h1 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(36px,7vw,80px)', letterSpacing: '-1px', color: 'white', textTransform: 'uppercase', lineHeight: 0.9, marginBottom: 10 }}>
