@@ -1,0 +1,126 @@
+import { useState } from "react";
+
+const LINK_WITH_BUMP = "https://buy.stripe.com/4gM9AV8ZW194eVOfk08IU08";
+const LINK_WITHOUT_BUMP = "https://buy.stripe.com/aFacN73FCcRM14Yc7O8IU07";
+
+const Orderbump = () => {
+  const [bumpAdded, setBumpAdded] = useState(false);
+  const total = bumpAdded ? "144€" : "97€";
+
+  const goToPayment = () => {
+    window.location.href = bumpAdded ? LINK_WITH_BUMP : LINK_WITHOUT_BUMP;
+  };
+  const skipBump = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.location.href = LINK_WITHOUT_BUMP;
+  };
+
+  return (
+    <div style={{ background: "#0a0a0a", color: "#f2ead8", fontFamily: "'DM Sans', sans-serif", minHeight: "100vh" }}>
+      <style>{`
+        .ob-hero { background: linear-gradient(135deg,#0a0a0a,#0f0a1a); border-bottom:3px solid #a78bfa; padding:50px 20px 40px; text-align:center; }
+        .ob-step-badge { display:inline-block; background:#7c3aed; color:white; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:3px; padding:8px 24px; margin-bottom:24px; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); }
+        .ob-hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(38px,7vw,80px); color:white; line-height:1; margin-bottom:12px; }
+        .ob-hero h1 span { color:#a78bfa; }
+        .ob-hero p { font-size:18px; color:#bbb; max-width:650px; margin:0 auto; line-height:1.6; }
+        .ob-bump-container { max-width:780px; margin:50px auto; padding:0 20px; }
+        .ob-bump-box { border:3px dashed #a78bfa; background:linear-gradient(135deg,#0f0a1a,#0f0f0f); padding:36px; position:relative; }
+        .ob-bump-label { position:absolute; top:-16px; left:30px; background:#a78bfa; color:black; font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:3px; padding:6px 20px; }
+        .ob-bump-header { display:flex; align-items:flex-start; gap:20px; margin-bottom:24px; }
+        .ob-custom-check { width:32px; height:32px; border:3px solid #a78bfa; background:transparent; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; font-size:20px; color:#a78bfa; flex-shrink:0; margin-top:4px; }
+        .ob-custom-check.checked { background:#a78bfa; color:black; }
+        .ob-bump-title-block .subtitle { font-size:14px; color:#888; letter-spacing:2px; text-transform:uppercase; }
+        .ob-bump-title-block h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(22px,4vw,36px); color:#a78bfa; line-height:1.1; margin:6px 0 0; }
+        .ob-secret-badge { display:inline-block; background:rgba(124,58,237,0.15); border:1px solid #7c3aed; color:#7c3aed; font-size:11px; letter-spacing:2px; padding:4px 12px; margin-bottom:16px; text-transform:uppercase; }
+        .ob-bump-body p { font-size:16px; color:#bbb; line-height:1.7; margin-bottom:14px; }
+        .ob-bump-body p strong { color:white; }
+        .ob-bump-body p em { color:#a78bfa; font-style:normal; }
+        .ob-bump-features { list-style:none; margin:20px 0; padding:0; }
+        .ob-bump-features li { display:flex; align-items:flex-start; gap:12px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:15px; color:#ccc; }
+        .ob-bump-features li .icon { color:#a78bfa; flex-shrink:0; }
+        .ob-urgency-bar { background:rgba(124,58,237,0.08); border:1px solid rgba(124,58,237,0.2); padding:12px 16px; font-size:14px; color:#b794f4; margin-bottom:20px; }
+        .ob-bump-price-row { display:flex; align-items:center; gap:16px; margin:24px 0 20px; flex-wrap:wrap; }
+        .ob-bump-price-old { font-size:18px; color:#555; text-decoration:line-through; }
+        .ob-bump-price-new { font-family:'Bebas Neue',sans-serif; font-size:52px; color:#a78bfa; line-height:1; }
+        .ob-bump-price-tag { background:#7c3aed; color:white; font-size:12px; padding:4px 12px; font-weight:700; letter-spacing:1px; }
+        .ob-add-btn { width:100%; background:#a78bfa; color:black; font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; padding:18px; border:none; cursor:pointer; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); transition:all 0.2s; }
+        .ob-add-btn:hover { filter:brightness(1.1); }
+        .ob-summary-box { max-width:780px; margin:0 auto 60px; padding:0 20px; }
+        .ob-order-summary { background:#1a1a1a; border:1px solid rgba(255,255,255,0.08); padding:30px; margin-bottom:24px; }
+        .ob-order-summary h3 { font-family:'Bebas Neue',sans-serif; font-size:24px; color:white; margin-bottom:20px; letter-spacing:1px; }
+        .ob-order-line { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:15px; color:#bbb; gap:12px; }
+        .ob-order-line.total { border-bottom:none; font-weight:700; font-size:18px; color:white; margin-top:8px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.1); }
+        .ob-order-line .price { color:#a78bfa; font-family:'Bebas Neue',sans-serif; font-size:20px; white-space:nowrap; }
+        .ob-order-line.total .price { font-size:28px; }
+        .ob-pay-btn { width:100%; background:#7c3aed; color:white; font-family:'Bebas Neue',sans-serif; font-size:clamp(20px,4vw,30px); letter-spacing:2px; padding:22px; border:none; cursor:pointer; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); box-shadow:0 8px 40px rgba(124,58,237,0.4); animation:ob-pulse 2s ease-in-out infinite; transition:all 0.2s; }
+        @keyframes ob-pulse { 0%,100%{box-shadow:0 8px 40px rgba(124,58,237,0.4);} 50%{box-shadow:0 8px 60px rgba(124,58,237,0.7);} }
+        .ob-pay-btn:hover { filter:brightness(1.1); }
+        .ob-secure-note { text-align:center; font-size:12px; color:#444; margin-top:12px; }
+      `}</style>
+
+      <div className="ob-hero">
+        <div className="ob-step-badge">⚓ ÉTAPE 2 SUR 2 — FINALISE TA COMMANDE</div>
+        <h1>Attends —<br /><span>Un bonus secret</span><br />t'attend ici</h1>
+        <p>Avant de payer, j'ai quelque chose d'exclusif à te proposer.<br />Quelque chose que je ne montre <strong>jamais publiquement.</strong></p>
+      </div>
+
+      <div className="ob-bump-container">
+        <div className="ob-bump-box">
+          <div className="ob-bump-label">⚡ OFFRE EXCLUSIVE — UNE SEULE FOIS</div>
+          <div className="ob-bump-header">
+            <div
+              className={`ob-custom-check ${bumpAdded ? "checked" : ""}`}
+              onClick={() => setBumpAdded(!bumpAdded)}
+              role="checkbox"
+              aria-checked={bumpAdded}
+              tabIndex={0}
+            >✓</div>
+            <div className="ob-bump-title-block">
+              <div className="subtitle">Ajouter à ma commande</div>
+              <h2>☠️ Accès à mon compte TikTok secret<br />— Analyse & Copie ma machine à vendre</h2>
+            </div>
+          </div>
+          <div className="ob-bump-body">
+            <div className="ob-secret-badge">🔒 JAMAIS MONTRÉ PUBLIQUEMENT</div>
+            <p>J'ai plusieurs dizaines de comptes TikTok qui vendent des produits digitaux chaque jour à ma place. <strong>Je ne les montre jamais.</strong> Pourquoi ? Parce que si tout le monde les connaît, ils perdent de leur efficacité.</p>
+            <p>Mais aujourd'hui, <em>uniquement sur cette page</em>, je t'ouvre les portes d'un de mes meilleurs comptes — celui qui convertit le plus. Tu verras exactement :</p>
+            <ul className="ob-bump-features">
+              <li><span className="icon">👁️</span><span>La structure exacte de mes carrousels qui génèrent des ventes avec 1000 vues seulement</span></li>
+              <li><span className="icon">🎯</span><span>Les hooks que j'utilise et qui stoppent le scroll en moins de 2 secondes</span></li>
+              <li><span className="icon">💰</span><span>Comment j'ai organisé mon compte pour que l'algo me pousse en continu</span></li>
+              <li><span className="icon">📋</span><span>Mes templates de carrousels à copier-coller directement dans ta stratégie</span></li>
+            </ul>
+            <p>Cette offre <strong>n'existe nulle part ailleurs.</strong> Elle n'est pas dans la formation. Elle n'est pas sur mon TikTok. Elle n'existera plus après cette page. C'est la seule et unique fois que je l'ouvre.</p>
+            <div className="ob-urgency-bar">⚠️ Cette offre disparaît dès que tu quittes cette page. Impossible d'y revenir après.</div>
+            <div className="ob-bump-price-row">
+              <span className="ob-bump-price-old">Valeur réelle : 197€</span>
+              <span className="ob-bump-price-new">47€</span>
+              <span className="ob-bump-price-tag">-76%</span>
+            </div>
+            <button className="ob-add-btn" onClick={() => setBumpAdded(true)}>✅ OUI — AJOUTE LE COMPTE SECRET À MA COMMANDE (+47€)</button>
+          </div>
+        </div>
+      </div>
+
+      <div className="ob-summary-box">
+        <div className="ob-order-summary">
+          <h3>📋 RÉCAPITULATIF DE COMMANDE</h3>
+          <div className="ob-order-line"><span>☠️ Système Pirate (méthode complète + accompagnement)</span><span className="price">97€</span></div>
+          {bumpAdded && (
+            <div className="ob-order-line"><span>🔒 Accès compte TikTok secret</span><span className="price">47€</span></div>
+          )}
+          <div className="ob-order-line total"><span>TOTAL</span><span className="price">{total}</span></div>
+        </div>
+        <button className="ob-pay-btn" onClick={goToPayment}>☠️ PAYER ET ACCÉDER À LA MÉTHODE PIRATE MAINTENANT</button>
+        <div className="ob-secure-note">🔒 Paiement 100% sécurisé via Stripe · Accès immédiat après paiement</div>
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <a href="#" onClick={skipBump} style={{ fontSize: 13, color: "#444", textDecoration: "underline" }}>
+            Non merci, je ne veux pas du bonus et je passe à côté de cette opportunité unique
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Orderbump;
