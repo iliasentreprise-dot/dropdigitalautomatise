@@ -11,6 +11,30 @@ import logo from "@/assets/logo-drop-digital.png";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [visitors, setVisitors] = useState(() => Math.floor(Math.random() * 12) + 11); // 11-22 initial
+
+  useEffect(() => {
+    const tick = () => {
+      setVisitors((prev) => {
+        const delta = Math.random() < 0.5 ? -1 : 1;
+        const magnitude = Math.random() < 0.75 ? 1 : 2;
+        let next = prev + delta * magnitude;
+        if (next < 5) next = 5 + Math.floor(Math.random() * 3);
+        if (next > 27) next = 27 - Math.floor(Math.random() * 3);
+        return next;
+      });
+    };
+    const schedule = () => {
+      const delay = 3000 + Math.random() * 3000; // 3-6s
+      return window.setTimeout(function run() {
+        tick();
+        (schedule as any)._id = window.setTimeout(run, 3000 + Math.random() * 3000);
+      }, delay);
+    };
+    const id = schedule();
+    return () => { window.clearTimeout(id); window.clearTimeout((schedule as any)._id); };
+  }, []);
+
   useEffect(() => {
     // Inject styles
     const styleId = "systeme-pirate-styles";
@@ -162,6 +186,10 @@ const Index = () => {
 
   return (
     <div className="sp-page">
+      <div className="live-visitors" aria-live="polite">
+        <span className="live-visitors-dot"></span>
+        <span><span className="live-visitors-count">{visitors}</span> {visitors > 1 ? 'personnes consultent' : 'personne consulte'} cette page en ce moment</span>
+      </div>
       <div className="fixed-nav-wrapper">
         <a href="/orderbump" className="fixed-btn-left" onClick={goOrderbump}>Réserver mon accès</a>
         <a href="/orderbump" className="fixed-btn-right" onClick={goOrderbump}>
