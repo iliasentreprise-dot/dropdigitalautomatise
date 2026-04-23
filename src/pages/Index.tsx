@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import avis1 from "@/assets/avis-1.jpeg";
 import avis2 from "@/assets/avis-2.png";
@@ -120,6 +120,12 @@ const Index = () => {
         .floating-logo { width: 180px; height: 180px; border-radius: 24px; box-shadow: 0 0 40px rgba(124,58,237,0.7), 0 0 80px rgba(124,58,237,0.3); animation: logo-float 3.5s ease-in-out infinite; object-fit: contain; background: rgba(124,58,237,0.05); padding: 8px; }
         @keyframes logo-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
         @media (max-width: 600px) { .floating-logo { width: 140px; height: 140px; } }
+        .live-visitors { position: fixed; bottom: 20px; left: 20px; z-index: 9998; background: rgba(10,10,10,0.92); backdrop-filter: blur(8px); border: 1px solid rgba(124,58,237,0.45); color: #f2ead8; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 10px 14px; border-radius: 10px; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 20px rgba(124,58,237,0.25); animation: lv-slide-in 0.6s ease-out 0.8s both; max-width: calc(100vw - 40px); }
+        .live-visitors-dot { width: 9px; height: 9px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,0.7); animation: lv-pulse 1.6s infinite; flex-shrink: 0; }
+        .live-visitors-count { color: #a78bfa; font-weight: 700; }
+        @keyframes lv-pulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.7); } 70% { box-shadow: 0 0 0 10px rgba(34,197,94,0); } 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); } }
+        @keyframes lv-slide-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 600px) { .live-visitors { bottom: 12px; left: 12px; right: 12px; font-size: 12px; padding: 9px 12px; } }
       `;
       document.head.appendChild(style);
     }
