@@ -234,7 +234,7 @@ const Index = () => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16, marginTop: 32 }}>
             <div className="module-glow">
               <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 20, color: 'white', marginBottom: 10 }}>Étape 1 — Tu crées ton produit digital en 5 minutes</h3>
-              <p style={{ fontSize: 16, color: '#bbb', lineHeight: 1.7 }}>Grâce à l'IA, notre outil IA te génère un PDF complet et une page de vente prête à encaisser. Zéro compétence. Zéro temps perdu.</p>
+              <p style={{ fontSize: 16, color: '#bbb', lineHeight: 1.7 }}>Grâce à notre outil IA on te génère un PDF complet et une page de vente prête à encaisser. Zéro compétence. Zéro temps perdu.</p>
             </div>
             <div className="module-glow">
               <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 20, color: 'white', marginBottom: 10 }}>Étape 2 — Le Système Pirate transforme tes <span style={{ color: '#7c3aed', fontWeight: 700 }}>VUES</span> en <span style={{ color: '#7c3aed', fontWeight: 700 }}>VENTES</span></h3>
