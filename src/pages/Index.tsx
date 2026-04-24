@@ -284,9 +284,9 @@ const Index = () => {
           </h2>
           <p style={{ fontSize: 17, color: '#888' }}>Le système tourne. Les chiffres parlent.</p>
           <div className="results-grid">
-            <div className="result-stat"><div className="number">20+</div><div className="label">Comptes TikTok actifs</div></div>
-            <div className="result-stat"><div className="number">1 an+</div><div className="label">Business model éprouvé</div></div>
-            <div className="result-stat"><div className="number">J+7</div><div className="label">Premières ventes garanties</div></div>
+            <div className="result-stat"><div className="number">20</div><div className="label">Comptes TikTok actifs</div></div>
+            <div className="result-stat"><div className="number">1 an</div><div className="label">Business model éprouvé</div></div>
+            <div className="result-stat"><div className="number">J7</div><div className="label">Premières ventes garanties</div></div>
           </div>
         </div>
 
