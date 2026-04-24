@@ -118,11 +118,10 @@ const Orderbump = () => {
         </div>
         <button className="ob-pay-btn" onClick={goToPayment}>☠️ PAYER ET ACCÉDER À LA MÉTHODE PIRATE MAINTENANT</button>
         <div className="ob-secure-note">🔒 Paiement 100% sécurisé via Stripe · Accès immédiat après paiement</div>
-        <div style={{ textAlign: "center", marginTop: 20 }}>
-          <a href="#" onClick={skipBump} style={{ fontSize: 13, color: "#444", textDecoration: "underline" }}>
-            Non merci, je ne veux pas du bonus et je passe à côté de cette opportunité unique
-          </a>
-        </div>
+      </div>
+    </div>
+  );
+};
       </div>
     </div>
   );
