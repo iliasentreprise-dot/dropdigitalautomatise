@@ -274,24 +274,6 @@ const Index = () => {
       <div className="skull-divider">☠ ☠ ☠</div>
       <div className="divider"></div>
 
-      <div className="dark-section">
-        <div className="inner">
-          <span className="section-tag">⚓ CE QUE TU REÇOIS</span>
-          <h2 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(36px,6vw,64px)', lineHeight: 1, color: 'white', marginBottom: 10 }}>
-            Le système complet. <em style={{ color: 'var(--sp-purple)', fontStyle: 'normal' }}>Rien de caché.</em>
-          </h2>
-          <p style={{ fontSize: 17, color: '#888' }}>Tout ce qu'il faut pour passer de zéro à tes premières ventes cette semaine.</p>
-          <div className="modules">
-            <div className="module-card"><div className="num">01</div><h3>⚓ Créer ton offre pirate</h3><p>Produit digital + promesse béton + garantie qui booste tes ventes de 300%. La structure complète que personne ne te montre.</p></div>
-            <div className="module-card"><div className="num">02</div><h3>☠️ Produire ton produit avec l'IA</h3><p>Les prompts exacts pour créer un ebook ou une mini-formation avec Claude en quelques heures. Design inclus.</p></div>
-            <div className="module-card"><div className="num">03</div><h3>🏴‍☠️ Le funnel qui encaisse</h3><p>Page de vente, prise de paiement, livraison automatique. Le client paie, reçoit, tu n'as rien à faire.</p></div>
-            <div className="module-card"><div className="num">04</div><h3>⚡ Les carrousels qui vendent</h3><p>La structure exacte des carrousels TikTok qui convertissent des vues en ventes — même avec 1000 vues seulement.</p></div>
-            <div className="module-card"><div className="num">05</div><h3>🎯 Scaler sans te montrer</h3><p>Comment multiplier les comptes et automatiser les ventes pendant que tu dors. Le vrai système passif.</p></div>
-            <div className="module-card"><div className="num">06</div><h3>💬 Accompagnement direct</h3><p>Accès direct pour poser tes questions et être guidé étape par étape. Je filtre rien, je cache rien.</p></div>
-          </div>
-        </div>
-      </div>
-
       <div className="divider"></div>
 
       <div className="proof-section">
