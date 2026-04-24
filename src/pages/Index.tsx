@@ -292,7 +292,9 @@ const Index = () => {
         </div>
         <div className="avis-grid">
           {[avis1, avis2, avis3, avis4, avis5, avis6].map((src, i) => (
-            <div key={i} className="avis-card"><img src={src} alt={`Avis client ${i + 1}`} loading="lazy" /></div>
+            <div key={i} className="avis-card" onClick={() => setZoomedImg(src)} style={{ cursor: 'zoom-in' }}>
+              <img src={src} alt={`Avis client ${i + 1}`} loading="lazy" />
+            </div>
           ))}
         </div>
       </div>
