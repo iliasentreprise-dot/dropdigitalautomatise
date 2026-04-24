@@ -277,17 +277,22 @@ const Index = () => {
       <div className="divider"></div>
 
       <div className="proof-section">
-        <span className="section-tag">📊 PREUVES RÉELLES</span>
-        <h2 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(36px,6vw,64px)', lineHeight: 1, color: 'white', marginBottom: 10 }}>
-          Des résultats. <em style={{ color: 'var(--sp-purple)', fontStyle: 'normal' }}>Pas des promesses.</em>
-        </h2>
-        <p style={{ fontSize: 17, color: '#888' }}>Le système tourne. Les chiffres parlent.</p>
-        <div className="results-grid">
-          <div className="result-stat"><div className="number">20+</div><div className="label">Comptes TikTok actifs</div></div>
-          <div className="result-stat"><div className="number">1 an+</div><div className="label">Business model éprouvé</div></div>
-          <div className="result-stat"><div className="number">J+7</div><div className="label">Premières ventes garanties</div></div>
+        <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 'clamp(30px,5vw,50px) clamp(20px,4vw,40px)', textAlign: 'center' }}>
+          <span className="section-tag">📊 PREUVES RÉELLES</span>
+          <h2 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(36px,6vw,64px)', lineHeight: 1, color: 'white', marginBottom: 10 }}>
+            Des résultats. <em style={{ color: 'var(--sp-purple)', fontStyle: 'normal' }}>Pas des promesses.</em>
+          </h2>
+          <p style={{ fontSize: 17, color: '#888' }}>Le système tourne. Les chiffres parlent.</p>
+          <div className="results-grid">
+            <div className="result-stat"><div className="number">20+</div><div className="label">Comptes TikTok actifs</div></div>
+            <div className="result-stat"><div className="number">1 an+</div><div className="label">Business model éprouvé</div></div>
+            <div className="result-stat"><div className="number">J+7</div><div className="label">Premières ventes garanties</div></div>
+          </div>
         </div>
-        <div style={{ marginTop: 50 }}>
+
+        <div style={{ height: 2, margin: '60px auto', maxWidth: 600, background: 'linear-gradient(90deg, transparent, var(--sp-purple), transparent)', boxShadow: '0 0 20px var(--sp-purple), 0 0 40px var(--sp-purple)', borderRadius: 2 }}></div>
+
+        <div style={{ marginTop: 30 }}>
           <h2 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(30px,5vw,52px)', lineHeight: 1, color: 'white', marginBottom: 30 }}>💬 ILS ONT APPLIQUÉ. VOILÀ CE QU'ILS EN DISENT.</h2>
         </div>
         <div className="avis-grid">
