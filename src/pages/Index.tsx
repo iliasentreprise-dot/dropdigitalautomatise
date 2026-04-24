@@ -396,6 +396,40 @@ const Index = () => {
       </footer>
 
       <div id="social-proof-container"></div>
+
+      {zoomedImg && (
+        <div
+          onClick={() => setZoomedImg(null)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 10000,
+            background: 'rgba(0,0,0,0.92)', backdropFilter: 'blur(8px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: 20, cursor: 'zoom-out', animation: 'lv-slide-in 0.25s ease-out',
+          }}
+        >
+          <button
+            onClick={(e) => { e.stopPropagation(); setZoomedImg(null); }}
+            aria-label="Fermer"
+            style={{
+              position: 'absolute', top: 20, right: 20,
+              background: 'rgba(124,58,237,0.85)', color: 'white',
+              border: 'none', borderRadius: '50%', width: 44, height: 44,
+              fontSize: 22, cursor: 'pointer', fontWeight: 700,
+              boxShadow: '0 0 20px rgba(124,58,237,0.6)',
+            }}
+          >×</button>
+          <img
+            src={zoomedImg}
+            alt="Avis client agrandi"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: '95vw', maxHeight: '90vh', objectFit: 'contain',
+              borderRadius: 12, border: '2px solid #7c3aed',
+              boxShadow: '0 0 40px rgba(124,58,237,0.5)',
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
