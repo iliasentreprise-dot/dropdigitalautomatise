@@ -12,6 +12,7 @@ import logo from "@/assets/logo-drop-digital.png";
 const Index = () => {
   const navigate = useNavigate();
   const [visitors, setVisitors] = useState(() => Math.floor(Math.random() * 12) + 11); // 11-22 initial
+  const [zoomedImg, setZoomedImg] = useState<string | null>(null);
 
   useEffect(() => {
     const tick = () => {
@@ -233,7 +234,7 @@ const Index = () => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16, marginTop: 32 }}>
             <div className="module-glow">
               <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 20, color: 'white', marginBottom: 10 }}>Étape 1 — Tu crées ton produit digital en 5 minutes</h3>
-              <p style={{ fontSize: 16, color: '#bbb', lineHeight: 1.7 }}>Grâce à l'IA, notre outil IA te génère un PDF complet et une page de vente prête à encaisser. Zéro compétence. Zéro temps perdu.</p>
+              <p style={{ fontSize: 16, color: '#bbb', lineHeight: 1.7 }}>Grâce à notre outil IA on te génère un PDF complet et une page de vente prête à encaisser. Zéro compétence. Zéro temps perdu.</p>
             </div>
             <div className="module-glow">
               <h3 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 20, color: 'white', marginBottom: 10 }}>Étape 2 — Le Système Pirate transforme tes <span style={{ color: '#7c3aed', fontWeight: 700 }}>VUES</span> en <span style={{ color: '#7c3aed', fontWeight: 700 }}>VENTES</span></h3>
@@ -273,24 +274,6 @@ const Index = () => {
       <div className="skull-divider">☠ ☠ ☠</div>
       <div className="divider"></div>
 
-      <div className="dark-section">
-        <div className="inner">
-          <span className="section-tag">⚓ CE QUE TU REÇOIS</span>
-          <h2 style={{ fontFamily: "'Bebas Neue',sans-serif", fontSize: 'clamp(36px,6vw,64px)', lineHeight: 1, color: 'white', marginBottom: 10 }}>
-            Le système complet. <em style={{ color: 'var(--sp-purple)', fontStyle: 'normal' }}>Rien de caché.</em>
-          </h2>
-          <p style={{ fontSize: 17, color: '#888' }}>Tout ce qu'il faut pour passer de zéro à tes premières ventes cette semaine.</p>
-          <div className="modules">
-            <div className="module-card"><div className="num">01</div><h3>⚓ Créer ton offre pirate</h3><p>Produit digital + promesse béton + garantie qui booste tes ventes de 300%. La structure complète que personne ne te montre.</p></div>
-            <div className="module-card"><div className="num">02</div><h3>☠️ Produire ton produit avec l'IA</h3><p>Les prompts exacts pour créer un ebook ou une mini-formation avec Claude en quelques heures. Design inclus.</p></div>
-            <div className="module-card"><div className="num">03</div><h3>🏴‍☠️ Le funnel qui encaisse</h3><p>Page de vente, prise de paiement, livraison automatique. Le client paie, reçoit, tu n'as rien à faire.</p></div>
-            <div className="module-card"><div className="num">04</div><h3>⚡ Les carrousels qui vendent</h3><p>La structure exacte des carrousels TikTok qui convertissent des vues en ventes — même avec 1000 vues seulement.</p></div>
-            <div className="module-card"><div className="num">05</div><h3>🎯 Scaler sans te montrer</h3><p>Comment multiplier les comptes et automatiser les ventes pendant que tu dors. Le vrai système passif.</p></div>
-            <div className="module-card"><div className="num">06</div><h3>💬 Accompagnement direct</h3><p>Accès direct pour poser tes questions et être guidé étape par étape. Je filtre rien, je cache rien.</p></div>
-          </div>
-        </div>
-      </div>
-
       <div className="divider"></div>
 
       <div className="proof-section">
@@ -309,7 +292,9 @@ const Index = () => {
         </div>
         <div className="avis-grid">
           {[avis1, avis2, avis3, avis4, avis5, avis6].map((src, i) => (
-            <div key={i} className="avis-card"><img src={src} alt={`Avis client ${i + 1}`} loading="lazy" /></div>
+            <div key={i} className="avis-card" onClick={() => setZoomedImg(src)} style={{ cursor: 'zoom-in' }}>
+              <img src={src} alt={`Avis client ${i + 1}`} loading="lazy" />
+            </div>
           ))}
         </div>
       </div>
@@ -411,6 +396,40 @@ const Index = () => {
       </footer>
 
       <div id="social-proof-container"></div>
+
+      {zoomedImg && (
+        <div
+          onClick={() => setZoomedImg(null)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 10000,
+            background: 'rgba(0,0,0,0.92)', backdropFilter: 'blur(8px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: 20, cursor: 'zoom-out', animation: 'lv-slide-in 0.25s ease-out',
+          }}
+        >
+          <button
+            onClick={(e) => { e.stopPropagation(); setZoomedImg(null); }}
+            aria-label="Fermer"
+            style={{
+              position: 'absolute', top: 20, right: 20,
+              background: 'rgba(124,58,237,0.85)', color: 'white',
+              border: 'none', borderRadius: '50%', width: 44, height: 44,
+              fontSize: 22, cursor: 'pointer', fontWeight: 700,
+              boxShadow: '0 0 20px rgba(124,58,237,0.6)',
+            }}
+          >×</button>
+          <img
+            src={zoomedImg}
+            alt="Avis client agrandi"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              maxWidth: '95vw', maxHeight: '90vh', objectFit: 'contain',
+              borderRadius: 12, border: '2px solid #7c3aed',
+              boxShadow: '0 0 40px rgba(124,58,237,0.5)',
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
