@@ -4,7 +4,7 @@ const LINK_WITH_BUMP = "https://buy.stripe.com/4gM9AV8ZW194eVOfk08IU08";
 const LINK_WITHOUT_BUMP = "https://buy.stripe.com/aFacN73FCcRM14Yc7O8IU07";
 
 const Orderbump = () => {
-  const [bumpAdded, setBumpAdded] = useState(false);
+  const [bumpAdded, setBumpAdded] = useState(true);
   const total = bumpAdded ? "144€" : "97€";
 
   const goToPayment = () => {
@@ -43,8 +43,12 @@ const Orderbump = () => {
         .ob-bump-price-old { font-size:18px; color:#555; text-decoration:line-through; }
         .ob-bump-price-new { font-family:'Bebas Neue',sans-serif; font-size:52px; color:#a78bfa; line-height:1; }
         .ob-bump-price-tag { background:#7c3aed; color:white; font-size:12px; padding:4px 12px; font-weight:700; letter-spacing:1px; }
-        .ob-add-btn { width:100%; background:#a78bfa; color:black; font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; padding:18px; border:none; cursor:pointer; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); transition:all 0.2s; }
+        .ob-add-btn { width:100%; background:#a78bfa; color:black; font-family:'Bebas Neue',sans-serif; font-size:clamp(15px,2.6vw,20px); letter-spacing:2px; padding:18px; border:none; cursor:pointer; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); transition:all 0.2s; margin-bottom:12px; }
         .ob-add-btn:hover { filter:brightness(1.1); }
+        .ob-add-btn.active { box-shadow:0 0 0 3px rgba(167,139,250,0.4), 0 0 30px rgba(167,139,250,0.5); }
+        .ob-refuse-btn { width:100%; background:transparent; color:#666; font-family:'DM Sans',sans-serif; font-size:clamp(12px,2.2vw,14px); letter-spacing:1px; padding:14px; border:1px solid rgba(255,255,255,0.1); cursor:pointer; transition:all 0.2s; text-transform:uppercase; }
+        .ob-refuse-btn:hover { color:#999; border-color:rgba(255,255,255,0.2); }
+        .ob-refuse-btn.active { color:#a78bfa; border-color:#a78bfa; }
         .ob-summary-box { max-width:780px; margin:0 auto 60px; padding:0 20px; }
         .ob-order-summary { background:#1a1a1a; border:1px solid rgba(255,255,255,0.08); padding:30px; margin-bottom:24px; }
         .ob-order-summary h3 { font-family:'Bebas Neue',sans-serif; font-size:24px; color:white; margin-bottom:20px; letter-spacing:1px; }
@@ -97,7 +101,8 @@ const Orderbump = () => {
               <span className="ob-bump-price-new">47€</span>
               <span className="ob-bump-price-tag">-76%</span>
             </div>
-            <button className="ob-add-btn" onClick={() => setBumpAdded(true)}>✅ OUI — AJOUTE LE COMPTE SECRET À MA COMMANDE (+47€)</button>
+            <button className={`ob-add-btn ${bumpAdded ? "active" : ""}`} onClick={() => setBumpAdded(true)}>✅ OUI, JE VEUX VOIR TON COMPTE TIKTOK QUI FAIT 2K/MOIS</button>
+            <button className={`ob-refuse-btn ${!bumpAdded ? "active" : ""}`} onClick={() => setBumpAdded(false)}>Non, je préfère rester ignorant et rater cette opportunité à jamais</button>
           </div>
         </div>
       </div>
