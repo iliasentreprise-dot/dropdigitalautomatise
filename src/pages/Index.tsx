@@ -12,6 +12,7 @@ import logo from "@/assets/logo-drop-digital.png";
 const Index = () => {
   const navigate = useNavigate();
   const [visitors, setVisitors] = useState(() => Math.floor(Math.random() * 12) + 11); // 11-22 initial
+  const [zoomedImg, setZoomedImg] = useState<string | null>(null);
 
   useEffect(() => {
     const tick = () => {
