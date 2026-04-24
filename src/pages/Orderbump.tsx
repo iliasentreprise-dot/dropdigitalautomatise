@@ -122,9 +122,5 @@ const Orderbump = () => {
     </div>
   );
 };
-      </div>
-    </div>
-  );
-};
 
 export default Orderbump;
