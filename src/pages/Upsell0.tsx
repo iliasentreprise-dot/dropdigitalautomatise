@@ -6,6 +6,7 @@ const Upsell0 = () => {
   const navigate = useNavigate();
   const [secondsLeft, setSecondsLeft] = useState(660);
   const [loadingUpsell, setLoadingUpsell] = useState(false);
+  const [imgZoom, setImgZoom] = useState(false);
 
   const handleAccept = async () => {
     const email = window.sessionStorage.getItem("declic_email");
@@ -307,10 +308,23 @@ const Upsell0 = () => {
             <p style={{ fontSize: 16, color: "#bbb", lineHeight: 1.7, marginBottom: 20 }}>
               Preuve que ça marche : tu viens d'acheter la Méthode Pirate pendant mon live. Je suis en train de générer 2 000€ durant ce live grâce exactement à ce que je vais te révéler.
             </p>
-            <p style={{ textAlign: "center", fontWeight: 700, fontSize: "24px", color: "#fff", margin: "24px 0 12px" }}>2037€ générés en un seul live TikTok</p>
-            <div style={{ margin: "12px 0 24px", textAlign: "center" }}>
-              <img src={tiktokLiveImg} alt="2037€ générés en un seul live TikTok" style={{ maxWidth: "100%", height: "auto", borderRadius: 8, display: "inline-block" }} />
+            <div style={{ background: "#f1f1f1", border: "1px solid #d9d9d9", borderRadius: 16, padding: "28px 24px", margin: "24px 0", textAlign: "center", boxShadow: "0 4px 18px rgba(0,0,0,0.25)" }}>
+              <p style={{ fontWeight: 800, fontSize: "32px", color: "#e11d2a", margin: "0 0 18px", lineHeight: 1.2 }}>2037€ générés en un seul live TikTok</p>
+              <img
+                src={tiktokLiveImg}
+                alt="2037€ générés en un seul live TikTok"
+                onClick={() => setImgZoom(true)}
+                style={{ maxWidth: "180px", width: "100%", height: "auto", borderRadius: 8, cursor: "zoom-in", display: "inline-block" }}
+              />
             </div>
+            {imgZoom && (
+              <div
+                onClick={() => setImgZoom(false)}
+                style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, cursor: "zoom-out", padding: 24 }}
+              >
+                <img src={tiktokLiveImg} alt="2037€ générés en un seul live TikTok" style={{ maxWidth: "92vw", maxHeight: "92vh", borderRadius: 12, boxShadow: "0 20px 60px rgba(0,0,0,0.5)" }} />
+              </div>
+            )}
           </div>
         </div>
 
