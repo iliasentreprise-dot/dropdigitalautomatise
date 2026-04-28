@@ -1,10 +1,30 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const STRIPE_LINK = "https://buy.stripe.com/00w6oJb84eZUcNGgo48IU0a";
 
 const Upsell2 = () => {
   const navigate = useNavigate();
   const refuse = () => navigate("/merci");
+  const [loadingUpsell, setLoadingUpsell] = useState(false);
+
+  const handleAccept = async () => {
+    const email = window.sessionStorage.getItem("declic_email");
+    if (!email) { navigate("/merci"); return; }
+    setLoadingUpsell(true);
+    try {
+      const res = await fetch("https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/charge-upsell", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYnFlZXl2Y2d1cHdhb3FmZG9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjUwMjUsImV4cCI6MjA5MjkwMTAyNX0.Tm9BP4sCpefxzX3S2b3hcp7pUtH5yvHyQJhBfRIJ6Ps",
+        },
+        body: JSON.stringify({ email, upsell_type: "upsell2" }),
+      });
+      await res.json().catch(() => ({}));
+      navigate("/merci");
+    } catch {
+      navigate("/merci");
+    }
+  };
 
   return (
     <div style={{ background: "#0a0a0a", color: "#f2ead8", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
@@ -106,7 +126,7 @@ const Upsell2 = () => {
         <div className="u2-pcross">Valeur réelle : 347€</div>
         <div className="u2-pmain">87€</div>
         <div className="u2-pnote">Uniquement sur cette page · Disparaît dès que tu pars</div>
-        <a href={STRIPE_LINK} className="u2-yes">🌊 OUI — JE VEUX LES 3 NICHES SECRÈTES</a>
+        <button type="button" className="u2-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🌊 OUI — JE VEUX LES 3 NICHES SECRÈTES"}</button>
         <div style={{ fontSize: 12, color: "#333", marginTop: 10 }}>🔒 Paiement sécurisé via Stripe · Accès immédiat</div>
         <button className="u2-no" onClick={refuse}>Non merci, je préfère rester sur les niches saturées et laisser cette opportunité partir pour toujours</button>
       </div>
