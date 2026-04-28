@@ -1,19 +1,160 @@
-import { useState } from "react";
+import { useState, FormEvent } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 
-const LINK_WITH_BUMP = "https://buy.stripe.com/4gM9AV8ZW194eVOfk08IU08";
-const LINK_WITHOUT_BUMP = "https://buy.stripe.com/aFacN73FCcRM14Yc7O8IU07";
+const STRIPE_PK =
+  "pk_live_51SNc4KQ9u6EzX6YbcWbV1iXFA96SnuLahor9v5y1IzYIKpFnY3ThpDbsBLZwxJ1Pm5HwX23FHXU1Q5bZc5pl57Hb00mhAZFOcM";
+const PI_URL =
+  "https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/create-payment-intent";
+const PI_AUTH =
+  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYnFlZXl2Y2d1cHdhb3FmZG9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjUwMjUsImV4cCI6MjA5MjkwMTAyNX0.Tm9BP4sCpefxzX3S2b3hcp7pUtH5yvHyQJhBfRIJ6Ps";
+
+const stripePromise = loadStripe(STRIPE_PK);
+
+const cardElementOptions = {
+  style: {
+    base: {
+      color: "#f2ead8",
+      fontFamily: "'DM Sans', sans-serif",
+      fontSize: "16px",
+      fontSmoothing: "antialiased",
+      "::placeholder": { color: "#666" },
+      iconColor: "#a78bfa",
+    },
+    invalid: {
+      color: "#ff6b6b",
+      iconColor: "#ff6b6b",
+    },
+  },
+};
+
+const CheckoutForm = ({ bumpAdded, total }: { bumpAdded: boolean; total: string }) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [prenom, setPrenom] = useState("");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+
+    if (!stripe || !elements) return;
+    if (!prenom.trim() || !email.trim()) {
+      setErrorMsg("Merci de renseigner ton prénom et ton email.");
+      return;
+    }
+    const card = elements.getElement(CardElement);
+    if (!card) return;
+
+    setLoading(true);
+    try {
+      const res = await fetch(PI_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: PI_AUTH,
+        },
+        body: JSON.stringify({
+          amount: bumpAdded ? 14400 : 9700,
+          email,
+          prenom,
+          bump: bumpAdded,
+        }),
+      });
+
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(txt || "Erreur serveur");
+      }
+      const data = await res.json();
+      const clientSecret = data.clientSecret || data.client_secret;
+      if (!clientSecret) throw new Error("Réponse invalide du serveur.");
+
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card,
+            billing_details: { name: prenom, email },
+          },
+        },
+      );
+
+      if (error) {
+        setErrorMsg(error.message || "Le paiement a échoué.");
+        setLoading(false);
+        return;
+      }
+
+      if (paymentIntent && paymentIntent.status === "succeeded") {
+        sessionStorage.setItem("declic_email", email);
+        window.location.href = "/upsell0";
+        return;
+      }
+
+      setErrorMsg("Le paiement n'a pas pu être finalisé.");
+      setLoading(false);
+    } catch (err: any) {
+      setErrorMsg(err?.message || "Une erreur est survenue.");
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="ob-pay-form">
+      <div className="ob-field-row">
+        <div className="ob-field">
+          <label>Prénom</label>
+          <input
+            type="text"
+            value={prenom}
+            onChange={(e) => setPrenom(e.target.value)}
+            placeholder="Ton prénom"
+            required
+          />
+        </div>
+        <div className="ob-field">
+          <label>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="ton@email.com"
+            required
+          />
+        </div>
+      </div>
+      <div className="ob-field">
+        <label>Carte bancaire</label>
+        <div className="ob-card-wrap">
+          <CardElement options={cardElementOptions} />
+        </div>
+      </div>
+      {errorMsg && <div className="ob-error">⚠️ {errorMsg}</div>}
+      <button
+        type="submit"
+        className="ob-pay-btn"
+        disabled={!stripe || loading}
+      >
+        {loading ? "PAIEMENT EN COURS…" : `☠️ PAYER ${total} ET ACCÉDER MAINTENANT`}
+      </button>
+      <div className="ob-secure-note">
+        🔒 Paiement 100% sécurisé via Stripe · Accès immédiat après paiement
+      </div>
+    </form>
+  );
+};
 
 const Orderbump = () => {
   const [bumpAdded, setBumpAdded] = useState(true);
   const total = bumpAdded ? "144€" : "97€";
-
-  const goToPayment = () => {
-    window.location.href = bumpAdded ? LINK_WITH_BUMP : LINK_WITHOUT_BUMP;
-  };
-  const skipBump = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.location.href = LINK_WITHOUT_BUMP;
-  };
 
   return (
     <div style={{ background: "#0a0a0a", color: "#f2ead8", fontFamily: "'DM Sans', sans-serif", minHeight: "100vh" }}>
@@ -56,10 +197,22 @@ const Orderbump = () => {
         .ob-order-line.total { border-bottom:none; font-weight:700; font-size:18px; color:white; margin-top:8px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.1); }
         .ob-order-line .price { color:#a78bfa; font-family:'Bebas Neue',sans-serif; font-size:20px; white-space:nowrap; }
         .ob-order-line.total .price { font-size:28px; }
+
+        .ob-pay-form { background:#1a1a1a; border:1px solid rgba(167,139,250,0.25); padding:30px; display:flex; flex-direction:column; gap:18px; }
+        .ob-field-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        @media (max-width:560px) { .ob-field-row { grid-template-columns:1fr; } }
+        .ob-field { display:flex; flex-direction:column; gap:8px; }
+        .ob-field label { font-family:'Bebas Neue',sans-serif; letter-spacing:2px; font-size:13px; color:#a78bfa; }
+        .ob-field input { background:#0f0f0f; border:1px solid rgba(255,255,255,0.1); color:#f2ead8; font-family:'DM Sans',sans-serif; font-size:16px; padding:14px 16px; outline:none; transition:border-color 0.2s; }
+        .ob-field input:focus { border-color:#a78bfa; }
+        .ob-card-wrap { background:#0f0f0f; border:1px solid rgba(255,255,255,0.1); padding:16px; transition:border-color 0.2s; }
+        .ob-card-wrap:focus-within { border-color:#a78bfa; }
+        .ob-error { background:rgba(255,107,107,0.1); border:1px solid rgba(255,107,107,0.4); color:#ff9b9b; padding:12px 16px; font-size:14px; }
         .ob-pay-btn { width:100%; background:#7c3aed; color:white; font-family:'Bebas Neue',sans-serif; font-size:clamp(20px,4vw,30px); letter-spacing:2px; padding:22px; border:none; cursor:pointer; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); box-shadow:0 8px 40px rgba(124,58,237,0.4); animation:ob-pulse 2s ease-in-out infinite; transition:all 0.2s; }
+        .ob-pay-btn:disabled { opacity:0.6; cursor:not-allowed; animation:none; }
         @keyframes ob-pulse { 0%,100%{box-shadow:0 8px 40px rgba(124,58,237,0.4);} 50%{box-shadow:0 8px 60px rgba(124,58,237,0.7);} }
-        .ob-pay-btn:hover { filter:brightness(1.1); }
-        .ob-secure-note { text-align:center; font-size:12px; color:#444; margin-top:12px; }
+        .ob-pay-btn:hover:not(:disabled) { filter:brightness(1.1); }
+        .ob-secure-note { text-align:center; font-size:12px; color:#666; margin-top:4px; }
       `}</style>
 
       <div className="ob-hero">
@@ -116,8 +269,10 @@ const Orderbump = () => {
           )}
           <div className="ob-order-line total"><span>TOTAL</span><span className="price">{total}</span></div>
         </div>
-        <button className="ob-pay-btn" onClick={goToPayment}>☠️ PAYER ET ACCÉDER À LA MÉTHODE PIRATE MAINTENANT</button>
-        <div className="ob-secure-note">🔒 Paiement 100% sécurisé via Stripe · Accès immédiat après paiement</div>
+
+        <Elements stripe={stripePromise}>
+          <CheckoutForm bumpAdded={bumpAdded} total={total} />
+        </Elements>
       </div>
     </div>
   );
