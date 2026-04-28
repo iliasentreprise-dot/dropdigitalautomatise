@@ -126,7 +126,7 @@ const Upsell2 = () => {
         <div className="u2-pcross">Valeur réelle : 347€</div>
         <div className="u2-pmain">87€</div>
         <div className="u2-pnote">Uniquement sur cette page · Disparaît dès que tu pars</div>
-        <a href={STRIPE_LINK} className="u2-yes">🌊 OUI — JE VEUX LES 3 NICHES SECRÈTES</a>
+        <button type="button" className="u2-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🌊 OUI — JE VEUX LES 3 NICHES SECRÈTES"}</button>
         <div style={{ fontSize: 12, color: "#333", marginTop: 10 }}>🔒 Paiement sécurisé via Stripe · Accès immédiat</div>
         <button className="u2-no" onClick={refuse}>Non merci, je préfère rester sur les niches saturées et laisser cette opportunité partir pour toujours</button>
       </div>
