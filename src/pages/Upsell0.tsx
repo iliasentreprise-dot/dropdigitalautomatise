@@ -1,11 +1,33 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const STRIPE_LINK = "https://buy.stripe.com/7sYaEZ1xu6to292b3K8IU0e";
-
 const Upsell0 = () => {
   const navigate = useNavigate();
   const [secondsLeft, setSecondsLeft] = useState(660);
+  const [loadingUpsell, setLoadingUpsell] = useState(false);
+
+  const handleAccept = async () => {
+    const email = window.sessionStorage.getItem("declic_email");
+    if (!email) {
+      navigate("/upsell1");
+      return;
+    }
+    setLoadingUpsell(true);
+    try {
+      const res = await fetch("https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/charge-upsell", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYnFlZXl2Y2d1cHdhb3FmZG9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjUwMjUsImV4cCI6MjA5MjkwMTAyNX0.Tm9BP4sCpefxzX3S2b3hcp7pUtH5yvHyQJhBfRIJ6Ps",
+        },
+        body: JSON.stringify({ email, upsell_type: "upsell0" }),
+      });
+      await res.json().catch(() => ({}));
+      navigate("/upsell1");
+    } catch {
+      navigate("/upsell1");
+    }
+  };
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -199,7 +221,7 @@ const Upsell0 = () => {
         {/* CTA HERO */}
         <div style={{ textAlign: "center", padding: "36px 20px", background: "rgba(232,17,10,0.06)", borderBottom: "1px solid rgba(232,17,10,0.15)" }}>
           <div className="u0-badge">Tu viens d'acheter pendant mon live — c'est la preuve que ça marche</div>
-          <a href={STRIPE_LINK} className="u0-yes">🏴‍☠️ OUI — JE VEUX ENCAISSER 1 500€ PAR LIVE</a>
+          <button type="button" className="u0-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🏴‍☠️ OUI — JE VEUX ENCAISSER 1 500€ PAR LIVE"}</button>
           <p style={{ fontSize: 13, color: "#444", marginTop: 8 }}>Ou continue à lire pour comprendre exactement ce que tu vas recevoir ↓</p>
         </div>
 
@@ -259,7 +281,7 @@ const Upsell0 = () => {
         {/* CTA mini */}
         <div className="u0-mini-cta">
           <p className="ph">Tu veux contrôler tes revenus<br /><span>ou attendre que l'algo décide pour toi ?</span></p>
-          <a href={STRIPE_LINK} className="u0-yes">🏴‍☠️ OUI — JE VEUX ENCAISSER 1 500€ PAR LIVE</a>
+          <button type="button" className="u0-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🏴‍☠️ OUI — JE VEUX ENCAISSER 1 500€ PAR LIVE"}</button>
           <p className="sub">Ou continue à lire ↓</p>
         </div>
 
@@ -393,7 +415,7 @@ const Upsell0 = () => {
         <div className="u0-mini-cta">
           <p className="ph">Les haters travaillent pour toi.</p>
           <p style={{ fontSize: 15, color: "#888", marginBottom: 24 }}>Apprends à transformer chaque commentaire négatif en vente.</p>
-          <a href={STRIPE_LINK} className="u0-yes">🏴‍☠️ OUI — JE VEUX ENCAISSER 1 500€ PAR LIVE</a>
+          <button type="button" className="u0-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🏴‍☠️ OUI — JE VEUX ENCAISSER 1 500€ PAR LIVE"}</button>
           <p className="sub">Ou continue à lire ↓</p>
         </div>
 
@@ -448,7 +470,7 @@ const Upsell0 = () => {
         <div className="u0-mini-cta">
           <p className="ph">6 biais. 1 script. Des ventes à chaque live.</p>
           <p style={{ fontSize: 15, color: "#888", marginBottom: 24 }}>Tu veux que je t'explique comment les activer dans l'ordre exact ?</p>
-          <a href={STRIPE_LINK} className="u0-yes">🏴‍☠️ OUI — JE VEUX ENCAISSER 1 500€ PAR LIVE</a>
+          <button type="button" className="u0-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🏴‍☠️ OUI — JE VEUX ENCAISSER 1 500€ PAR LIVE"}</button>
           <p className="sub">Ou continue à lire ↓</p>
         </div>
 
@@ -469,7 +491,7 @@ const Upsell0 = () => {
           </div>
           <div style={{ textAlign: "center", marginTop: 40 }}>
             <div className="u0-badge">Accès immédiat · Plus que 3 places disponibles</div>
-            <a href={STRIPE_LINK} className="u0-yes">🏴‍☠️ OUI — JE VEUX ENCAISSER 1500€ PAR LIVE</a>
+            <button type="button" className="u0-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🏴‍☠️ OUI — JE VEUX ENCAISSER 1500€ PAR LIVE"}</button>
             <p style={{ fontSize: 13, color: "#444", marginTop: 8 }}>Tu rentabilises en un seul live · Accès immédiat</p>
           </div>
         </div>
@@ -528,7 +550,7 @@ const Upsell0 = () => {
           <div className="u0-pmain">97€</div>
           <div className="u0-pnote">Uniquement sur cette page · Jamais reproposé à ce prix</div>
           <div className="u0-badge">3 places restantes · Accès immédiat</div>
-          <a href={STRIPE_LINK} className="u0-yes">🏴‍☠️ OUI — JE VEUX ENCAISSER 1500€ PAR LIVE</a>
+          <button type="button" className="u0-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🏴‍☠️ OUI — JE VEUX ENCAISSER 1500€ PAR LIVE"}</button>
           <div className="u0-secure">🔒 Paiement sécurisé via Stripe · Accès immédiat</div>
           <button className="u0-no" onClick={goRefuse}>
             Non, je refuse cette opportunité. Je préfère attendre que l'algo me pousse et rester à 200€/mois pendant que les vrais Pirates encaissent 1 500€ par live à ma place.
