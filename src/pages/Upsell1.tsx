@@ -119,7 +119,7 @@ const Upsell1 = () => {
         <div className="u1-pcross">Valeur réelle : 1997€</div>
         <div className="u1-pmain">597€</div>
         <div className="u1-pnote">Uniquement sur cette page · Jamais reproposé à ce prix</div>
-        <a href={STRIPE_LINK} className="u1-yes">🏴‍☠️ OUI — JE VEUX QUE TU FASSES TOUT À MA PLACE</a>
+        <button type="button" className="u1-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🏴‍☠️ OUI — JE VEUX QUE TU FASSES TOUT À MA PLACE"}</button>
         <div style={{ fontSize: 12, color: "#333", marginTop: 10 }}>🔒 Paiement sécurisé via Stripe · Accès immédiat</div>
         <button className="u1-no" onClick={refuse}>Non merci, je préfère tout faire seul et passer à côté de cette opportunité</button>
       </div>
