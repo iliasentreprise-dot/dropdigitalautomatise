@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import tiktokLiveImg from "@/assets/tiktok-live-2037.jpg";
 
 const Upsell0 = () => {
   const navigate = useNavigate();
@@ -306,7 +307,10 @@ const Upsell0 = () => {
             <p style={{ fontSize: 16, color: "#bbb", lineHeight: 1.7, marginBottom: 20 }}>
               Preuve que ça marche : tu viens d'acheter la Méthode Pirate pendant mon live. Je suis en train de générer 2 000€ durant ce live grâce exactement à ce que je vais te révéler.
             </p>
-            <div className="u0-img"><span>📸</span><p>Screenshot Stripe 1 103€ — à remplacer</p></div>
+            <p style={{ textAlign: "center", fontWeight: 700, fontSize: "24px", color: "#fff", margin: "24px 0 12px" }}>2037€ générés en un seul live TikTok</p>
+            <div style={{ margin: "12px 0 24px", textAlign: "center" }}>
+              <img src={tiktokLiveImg} alt="2037€ générés en un seul live TikTok" style={{ maxWidth: "100%", height: "auto", borderRadius: 8, display: "inline-block" }} />
+            </div>
           </div>
         </div>
 
