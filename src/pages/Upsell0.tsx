@@ -1,11 +1,33 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const STRIPE_LINK = "https://buy.stripe.com/7sYaEZ1xu6to292b3K8IU0e";
-
 const Upsell0 = () => {
   const navigate = useNavigate();
   const [secondsLeft, setSecondsLeft] = useState(660);
+  const [loadingUpsell, setLoadingUpsell] = useState(false);
+
+  const handleAccept = async () => {
+    const email = window.sessionStorage.getItem("declic_email");
+    if (!email) {
+      navigate("/upsell1");
+      return;
+    }
+    setLoadingUpsell(true);
+    try {
+      const res = await fetch("https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/charge-upsell", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYnFlZXl2Y2d1cHdhb3FmZG9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjUwMjUsImV4cCI6MjA5MjkwMTAyNX0.Tm9BP4sCpefxzX3S2b3hcp7pUtH5yvHyQJhBfRIJ6Ps",
+        },
+        body: JSON.stringify({ email, upsell_type: "upsell0" }),
+      });
+      await res.json().catch(() => ({}));
+      navigate("/upsell1");
+    } catch {
+      navigate("/upsell1");
+    }
+  };
 
   useEffect(() => {
     const t = setInterval(() => {
