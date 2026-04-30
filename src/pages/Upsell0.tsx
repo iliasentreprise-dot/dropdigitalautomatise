@@ -7,6 +7,7 @@ const Upsell0 = () => {
   const [secondsLeft, setSecondsLeft] = useState(660);
   const [loadingUpsell, setLoadingUpsell] = useState(false);
   const [imgZoom, setImgZoom] = useState(false);
+  const [paymentError, setPaymentError] = useState(false);
 
   const handleAccept = async () => {
     const email = window.sessionStorage.getItem("declic_email");
@@ -15,6 +16,7 @@ const Upsell0 = () => {
       return;
     }
     setLoadingUpsell(true);
+    setPaymentError(false);
     try {
       const res = await fetch("https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/charge-upsell", {
         method: "POST",
@@ -24,10 +26,16 @@ const Upsell0 = () => {
         },
         body: JSON.stringify({ email, upsell_type: "upsell0" }),
       });
-      await res.json().catch(() => ({}));
-      navigate("/upsell1");
+      const data = await res.json().catch(() => ({} as any));
+      if (res.ok && data && data.success === true) {
+        navigate("/upsell1");
+      } else {
+        setPaymentError(true);
+        setLoadingUpsell(false);
+      }
     } catch {
-      navigate("/upsell1");
+      setPaymentError(true);
+      setLoadingUpsell(false);
     }
   };
 
@@ -570,6 +578,11 @@ const Upsell0 = () => {
           <div className="u0-badge">3 places restantes · Accès immédiat</div>
           <button type="button" className="u0-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🏴‍☠️ OUI — JE VEUX ENCAISSER 1500€ PAR LIVE"}</button>
           <div className="u0-secure">🔒 Paiement sécurisé via Stripe · Accès immédiat</div>
+          {paymentError && (
+            <p style={{ color: "#e8110a", fontWeight: 700, textAlign: "center", marginTop: 16, fontSize: 16 }}>
+              ❌ Paiement refusé, veuillez vérifier votre carte ou contacter votre banque.
+            </p>
+          )}
           <button onClick={goRefuse} style={{ background: "#ffffff", color: "#000000", border: "1px solid #cccccc", borderRadius: "4px", padding: "12px 24px", fontSize: "13px", cursor: "pointer", marginTop: "16px", display: "inline-block" }}>
             Non, je refuse cette opportunité. Je préfère attendre que l'algo me pousse et rester à 200€/mois pendant que les vrais Pirates encaissent 1 500€ par live à ma place.
           </button>

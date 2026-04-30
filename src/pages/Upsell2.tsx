@@ -5,11 +5,13 @@ const Upsell2 = () => {
   const navigate = useNavigate();
   const refuse = () => navigate("/merci");
   const [loadingUpsell, setLoadingUpsell] = useState(false);
+  const [paymentError, setPaymentError] = useState(false);
 
   const handleAccept = async () => {
     const email = window.sessionStorage.getItem("declic_email");
     if (!email) { navigate("/merci"); return; }
     setLoadingUpsell(true);
+    setPaymentError(false);
     try {
       const res = await fetch("https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/charge-upsell", {
         method: "POST",
@@ -19,10 +21,16 @@ const Upsell2 = () => {
         },
         body: JSON.stringify({ email, upsell_type: "upsell2" }),
       });
-      await res.json().catch(() => ({}));
-      navigate("/merci");
+      const data = await res.json().catch(() => ({} as any));
+      if (res.ok && data && data.success === true) {
+        navigate("/merci");
+      } else {
+        setPaymentError(true);
+        setLoadingUpsell(false);
+      }
     } catch {
-      navigate("/merci");
+      setPaymentError(true);
+      setLoadingUpsell(false);
     }
   };
 
@@ -128,6 +136,11 @@ const Upsell2 = () => {
         <div className="u2-pnote">Uniquement sur cette page · Disparaît dès que tu pars</div>
         <button type="button" className="u2-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🌊 OUI — JE VEUX LES 3 NICHES SECRÈTES"}</button>
         <div style={{ fontSize: 12, color: "#333", marginTop: 10 }}>🔒 Paiement sécurisé via Stripe · Accès immédiat</div>
+        {paymentError && (
+          <p style={{ color: "#e8110a", fontWeight: 700, textAlign: "center", marginTop: 16, fontSize: 16 }}>
+            ❌ Paiement refusé, veuillez vérifier votre carte ou contacter votre banque.
+          </p>
+        )}
         <button onClick={refuse} style={{ background: "#ffffff", color: "#000000", border: "1px solid #cccccc", borderRadius: "4px", padding: "12px 24px", fontSize: "13px", cursor: "pointer", marginTop: "16px", display: "inline-block" }}>Non merci, je préfère rester sur les niches saturées et laisser cette opportunité partir pour toujours</button>
       </div>
     </div>
