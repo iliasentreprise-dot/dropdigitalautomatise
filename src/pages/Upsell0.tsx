@@ -578,6 +578,11 @@ const Upsell0 = () => {
           <div className="u0-badge">3 places restantes · Accès immédiat</div>
           <button type="button" className="u0-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🏴‍☠️ OUI — JE VEUX ENCAISSER 1500€ PAR LIVE"}</button>
           <div className="u0-secure">🔒 Paiement sécurisé via Stripe · Accès immédiat</div>
+          {paymentError && (
+            <p style={{ color: "#e8110a", fontWeight: 700, textAlign: "center", marginTop: 16, fontSize: 16 }}>
+              ❌ Paiement refusé, veuillez vérifier votre carte ou contacter votre banque.
+            </p>
+          )}
           <button onClick={goRefuse} style={{ background: "#ffffff", color: "#000000", border: "1px solid #cccccc", borderRadius: "4px", padding: "12px 24px", fontSize: "13px", cursor: "pointer", marginTop: "16px", display: "inline-block" }}>
             Non, je refuse cette opportunité. Je préfère attendre que l'algo me pousse et rester à 200€/mois pendant que les vrais Pirates encaissent 1 500€ par live à ma place.
           </button>
