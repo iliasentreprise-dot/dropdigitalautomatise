@@ -322,7 +322,7 @@ const Upsell0 = () => {
                 src={tiktokLiveImg}
                 alt="2037€ générés en un seul live TikTok"
                 onClick={() => setImgZoom(true)}
-                style={{ maxWidth: "180px", width: "100%", height: "auto", borderRadius: 8, cursor: "zoom-in", display: "inline-block" }}
+                style={{ maxWidth: "420px", width: "100%", height: "auto", borderRadius: 8, cursor: "zoom-in", display: "inline-block" }}
               />
             </div>
             {imgZoom && (
