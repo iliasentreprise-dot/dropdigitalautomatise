@@ -7,6 +7,7 @@ const Upsell0 = () => {
   const [secondsLeft, setSecondsLeft] = useState(660);
   const [loadingUpsell, setLoadingUpsell] = useState(false);
   const [imgZoom, setImgZoom] = useState(false);
+  const [paymentError, setPaymentError] = useState(false);
 
   const handleAccept = async () => {
     const email = window.sessionStorage.getItem("declic_email");
@@ -15,6 +16,7 @@ const Upsell0 = () => {
       return;
     }
     setLoadingUpsell(true);
+    setPaymentError(false);
     try {
       const res = await fetch("https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/charge-upsell", {
         method: "POST",
@@ -24,10 +26,16 @@ const Upsell0 = () => {
         },
         body: JSON.stringify({ email, upsell_type: "upsell0" }),
       });
-      await res.json().catch(() => ({}));
-      navigate("/upsell1");
+      const data = await res.json().catch(() => ({} as any));
+      if (res.ok && data && data.success === true) {
+        navigate("/upsell1");
+      } else {
+        setPaymentError(true);
+        setLoadingUpsell(false);
+      }
     } catch {
-      navigate("/upsell1");
+      setPaymentError(true);
+      setLoadingUpsell(false);
     }
   };
 
