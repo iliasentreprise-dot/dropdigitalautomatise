@@ -1,9 +1,34 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Upsell2 = () => {
   const navigate = useNavigate();
-  const refuse = () => navigate("/merci");
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+      return;
+    }
+    fetch(
+      "https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/validate-upsell-token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYnFlZXl2Y2d1cHdhb3FmZG9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjUwMjUsImV4cCI6MjA5MjkwMTAyNX0.Tm9BP4sCpefxzX3S2b3hcp7pUtH5yvHyQJhBfRIJ6Ps",
+        },
+        body: JSON.stringify({ token }),
+      }
+    )
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.valid) navigate("/");
+      });
+  }, [token]);
+
+  const refuse = () => navigate(`/merci?token=${token}`);
   const [loadingUpsell, setLoadingUpsell] = useState(false);
   const [paymentError, setPaymentError] = useState(false);
 
