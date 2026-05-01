@@ -95,7 +95,19 @@ const CheckoutForm = ({ bumpAdded, total }: { bumpAdded: boolean; total: string 
 
       if (paymentIntent && paymentIntent.status === "succeeded") {
         sessionStorage.setItem("declic_email", email);
-        window.location.href = "/upsell0";
+        const tokenRes = await fetch(
+          "https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/create-upsell-token",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYnFlZXl2Y2d1cHdhb3FmZG9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjUwMjUsImV4cCI6MjA5MjkwMTAyNX0.Tm9BP4sCpefxzX3S2b3hcp7pUtH5yvHyQJhBfRIJ6Ps",
+            },
+            body: JSON.stringify({ email }),
+          }
+        );
+        const tokenData = await tokenRes.json();
+        window.location.href = `/upsell0?token=${tokenData.token}`;
         return;
       }
 
