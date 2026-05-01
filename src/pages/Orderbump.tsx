@@ -280,8 +280,26 @@ const Orderbump = () => {
               <span className="ob-bump-price-new">47€</span>
               <span className="ob-bump-price-tag">-76%</span>
             </div>
-            <button className={`ob-add-btn ${bumpAdded ? "active" : ""}`} onClick={() => setBumpAdded(true)}>✅ OUI, JE VEUX VOIR TON COMPTE TIKTOK QUI FAIT 2K/MOIS</button>
-            <button className={`ob-refuse-btn ${!bumpAdded ? "active" : ""}`} onClick={() => setBumpAdded(false)}>Non, je préfère rester ignorant et rater cette opportunité à jamais</button>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, margin: "24px 0" }}>
+              <div
+                onClick={() => setBumpAdded(true)}
+                style={{ display: "flex", alignItems: "center", gap: 16, cursor: "pointer", padding: "16px 20px", background: bumpAdded ? "rgba(34,197,94,0.08)" : "rgba(255,255,255,0.03)", border: bumpAdded ? "2px solid #22c55e" : "2px solid rgba(255,255,255,0.1)", borderRadius: 8, transition: "all 0.2s" }}
+              >
+                <div style={{ width: 28, height: 28, borderRadius: 6, background: bumpAdded ? "#22c55e" : "#2a2a2a", boxShadow: "inset 0 2px 4px rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }}>
+                  {bumpAdded && <span style={{ color: "white", fontSize: 16, fontWeight: 700 }}>✓</span>}
+                </div>
+                <span style={{ color: "#22c55e", fontWeight: 700, fontSize: 15, lineHeight: 1.4 }}>OUI, je veux voir ton compte secret qui fait 2000€/mois en anonyme</span>
+              </div>
+              <div
+                onClick={() => setBumpAdded(false)}
+                style={{ display: "flex", alignItems: "center", gap: 16, cursor: "pointer", padding: "16px 20px", background: !bumpAdded ? "rgba(232,17,10,0.08)" : "rgba(255,255,255,0.03)", border: !bumpAdded ? "2px solid #e8110a" : "2px solid rgba(255,255,255,0.1)", borderRadius: 8, transition: "all 0.2s" }}
+              >
+                <div style={{ width: 28, height: 28, borderRadius: 6, background: !bumpAdded ? "#e8110a" : "#2a2a2a", boxShadow: "inset 0 2px 4px rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.2s" }}>
+                  {!bumpAdded && <span style={{ color: "white", fontSize: 16, fontWeight: 700 }}>✗</span>}
+                </div>
+                <span style={{ color: "#e8110a", fontWeight: 600, fontSize: 14, lineHeight: 1.4 }}>NON, je préfère louper l'opportunité de pouvoir voir comment tu vends tes produits digitaux avec tes vrais comptes</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
