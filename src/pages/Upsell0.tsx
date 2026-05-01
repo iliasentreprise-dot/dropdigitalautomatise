@@ -1,9 +1,33 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import tiktokLiveImg from "@/assets/tiktok-live-2037.jpg";
 
 const Upsell0 = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+      return;
+    }
+    fetch(
+      "https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/validate-upsell-token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYnFlZXl2Y2d1cHdhb3FmZG9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjUwMjUsImV4cCI6MjA5MjkwMTAyNX0.Tm9BP4sCpefxzX3S2b3hcp7pUtH5yvHyQJhBfRIJ6Ps",
+        },
+        body: JSON.stringify({ token }),
+      }
+    )
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.valid) navigate("/");
+      });
+  }, [token]);
   const [secondsLeft, setSecondsLeft] = useState(660);
   const [loadingUpsell, setLoadingUpsell] = useState(false);
   const [imgZoom, setImgZoom] = useState(false);
@@ -12,7 +36,7 @@ const Upsell0 = () => {
   const handleAccept = async () => {
     const email = window.sessionStorage.getItem("declic_email");
     if (!email) {
-      navigate("/upsell1");
+      navigate(`/upsell1?token=${token}`);
       return;
     }
     setLoadingUpsell(true);
@@ -28,7 +52,7 @@ const Upsell0 = () => {
       });
       const data = await res.json().catch(() => ({} as any));
       if (res.ok && data && data.success === true) {
-        navigate("/upsell1");
+        navigate(`/upsell1?token=${token}`);
       } else {
         setPaymentError(true);
         setLoadingUpsell(false);
@@ -44,7 +68,7 @@ const Upsell0 = () => {
       setSecondsLeft((s) => {
         if (s <= 1) {
           clearInterval(t);
-          navigate("/upsell1");
+          navigate(`/upsell1?token=${token}`);
           return 0;
         }
         return s - 1;
@@ -56,7 +80,7 @@ const Upsell0 = () => {
   const m = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
   const s = String(secondsLeft % 60).padStart(2, "0");
 
-  const goRefuse = () => navigate("/upsell1");
+  const goRefuse = () => navigate(`/upsell1?token=${token}`);
 
   return (
     <div style={{ background: "#0a0a0a", color: "#f2ead8", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
