@@ -34,7 +34,7 @@ const Upsell1 = () => {
 
   const handleAccept = async () => {
     const email = window.sessionStorage.getItem("declic_email");
-    if (!email) { navigate("/upsell2"); return; }
+    if (!email) { navigate(`/upsell2?token=${token}`); return; }
     setLoadingUpsell(true);
     setPaymentError(false);
     try {
@@ -48,7 +48,7 @@ const Upsell1 = () => {
       });
       const data = await res.json().catch(() => ({} as any));
       if (res.ok && data && data.success === true) {
-        navigate("/upsell2");
+        navigate(`/upsell2?token=${token}`);
       } else {
         setPaymentError(true);
         setLoadingUpsell(false);
