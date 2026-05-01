@@ -243,7 +243,7 @@ const Upsell0 = () => {
           <h2>Voici pourquoi tu vas rester coincé<br />à <span>200€/mois</span> comme un amateur</h2>
           <div className="u0-upgrade">
             <h3>Pendant que tu fêtes tes premiers carrousels à 200€...</h3>
-            <p>D'autres encaissent <strong>1 500€ en UN SEUL LIVE</strong> avec le même nombre de spectateurs.<br /><br />
+            <p>D'autres encaissent <strong>1 500€ en UN SEUL LIVE</strong> avec moins de 20 spectateurs.<br /><br />
             Les carrousels c'est le niveau DÉBUTANT. Si tu t'arrêtes là tu resteras dans la catégorie <strong>"petits joueurs"</strong> pendant que les vrais Pirates font 10 000€/mois avec leurs lives TikTok.</p>
           </div>
         </div>
@@ -268,7 +268,7 @@ const Upsell0 = () => {
                   <li>Reach peut chuter du jour au lendemain</li>
                   <li>Impossible de forcer une vente</li>
                   <li>Tu attends. Tu espères.</li>
-                  <li>Plafond naturel à 500€/mois</li>
+                  <li>Plafond naturel à 3000€/mois si t'es bon</li>
                 </ul>
               </div>
               <div className="u0-vscard good">
@@ -385,6 +385,17 @@ const Upsell0 = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="u0-divider"></div>
+
+        {/* CTA après cerveau timeline */}
+        <div className="u0-mini-cta">
+          <button type="button" className="u0-yes" onClick={handleAccept} disabled={loadingUpsell}>{loadingUpsell ? "Traitement en cours..." : "🏴‍☠️ JE VEUX ENCAISSER 1 500€ PAR LIVE"}</button>
+          {paymentError && (
+            <p style={{ color: "#e8110a", fontWeight: 700, fontSize: 16, textAlign: "center", margin: "16px 0" }}>❌ Paiement refusé, veuillez vérifier votre carte ou contacter votre banque.</p>
+          )}
+          <p className="sub">Ou continue à lire ↓</p>
         </div>
 
         <div className="u0-divider"></div>
