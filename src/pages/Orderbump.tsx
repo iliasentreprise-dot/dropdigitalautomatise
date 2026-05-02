@@ -8,7 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 
 const STRIPE_PK =
-  "pk_test_51TR1ZlLEX9OBZ3JcCEc8hpCioTC4VOhHgRKxSb60I5QM0QMfHq5mprJhjJZ7qSXhX0aMy5Dg2dgKnVOI0tdfLPej00s5kEVoYfM";
+  "pk_test_51TR1ZlLEX9OBZ3JcCEc8hpCioTC4VOhHgRKxSb60I5QM0QMfHq5mprJhjJZ7qSXhX0aMy5Dg2dgKnVOI0tdfLPej00s5kEVoYf";
 const PI_URL =
   "https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/create-payment-intent";
 const PI_AUTH =
