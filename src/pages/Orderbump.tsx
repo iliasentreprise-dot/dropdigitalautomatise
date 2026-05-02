@@ -1,8 +1,8 @@
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
-  CardElement,
+  PaymentElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
@@ -16,28 +16,23 @@ const PI_AUTH =
 
 const stripePromise = loadStripe(STRIPE_PK);
 
-const cardElementOptions = {
-  style: {
-    base: {
-      color: "#f2ead8",
-      fontFamily: "'DM Sans', sans-serif",
-      fontSize: "16px",
-      fontSmoothing: "antialiased",
-      "::placeholder": { color: "#666" },
-      iconColor: "#a78bfa",
-    },
-    invalid: {
-      color: "#ff6b6b",
-      iconColor: "#ff6b6b",
-    },
-  },
-};
-
-const CheckoutForm = ({ bumpAdded, total }: { bumpAdded: boolean; total: string }) => {
+const PaymentForm = ({
+  bumpAdded,
+  total,
+  prenom,
+  setPrenom,
+  email,
+  setEmail,
+}: {
+  bumpAdded: boolean;
+  total: string;
+  prenom: string;
+  setPrenom: (v: string) => void;
+  email: string;
+  setEmail: (v: string) => void;
+}) => {
   const stripe = useStripe();
   const elements = useElements();
-  const [prenom, setPrenom] = useState("");
-  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -50,69 +45,42 @@ const CheckoutForm = ({ bumpAdded, total }: { bumpAdded: boolean; total: string 
       setErrorMsg("Merci de renseigner ton prénom et ton email.");
       return;
     }
-    const card = elements.getElement(CardElement);
-    if (!card) return;
 
     setLoading(true);
+
+    sessionStorage.setItem("declic_email", email);
+    sessionStorage.setItem("declic_bump", bumpAdded ? "1" : "0");
+
     try {
-      const res = await fetch(PI_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: PI_AUTH,
-        },
-        body: JSON.stringify({
-          amount: bumpAdded ? 14400 : 9700,
-          email,
-          prenom,
-          bump: bumpAdded,
-        }),
-      });
-
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(txt || "Erreur serveur");
-      }
-      const data = await res.json();
-      const clientSecret = data.clientSecret || data.client_secret;
-      if (!clientSecret) throw new Error("Réponse invalide du serveur.");
-
-      const { error, paymentIntent } = await stripe.confirmCardPayment(
-        clientSecret,
+      const tokenRes = await fetch(
+        "https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/create-upsell-token",
         {
-          payment_method: {
-            card,
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: PI_AUTH,
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+      const tokenData = await tokenRes.json();
+      const returnUrl = `${window.location.origin}/upsell0?token=${tokenData.token}`;
+
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: returnUrl,
+          payment_method_data: {
             billing_details: { name: prenom, email },
           },
         },
-      );
+      });
 
       if (error) {
         setErrorMsg(error.message || "Le paiement a échoué.");
         setLoading(false);
         return;
       }
-
-      if (paymentIntent && paymentIntent.status === "succeeded") {
-        sessionStorage.setItem("declic_email", email);
-        const tokenRes = await fetch(
-          "https://tebqeeyvcgupwaoqfdod.supabase.co/functions/v1/create-upsell-token",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlYnFlZXl2Y2d1cHdhb3FmZG9kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjUwMjUsImV4cCI6MjA5MjkwMTAyNX0.Tm9BP4sCpefxzX3S2b3hcp7pUtH5yvHyQJhBfRIJ6Ps",
-            },
-            body: JSON.stringify({ email }),
-          }
-        );
-        const tokenData = await tokenRes.json();
-        window.location.href = `/upsell0?token=${tokenData.token}`;
-        return;
-      }
-
-      setErrorMsg("Le paiement n'a pas pu être finalisé.");
-      setLoading(false);
     } catch (err: any) {
       setErrorMsg(err?.message || "Une erreur est survenue.");
       setLoading(false);
@@ -158,9 +126,9 @@ const CheckoutForm = ({ bumpAdded, total }: { bumpAdded: boolean; total: string 
         </div>
       </div>
       <div className="ob-field">
-        <label>Carte bancaire</label>
+        <label>Mode de paiement</label>
         <div className="ob-card-wrap">
-          <CardElement options={cardElementOptions} />
+          <PaymentElement options={{ layout: "tabs" }} />
         </div>
       </div>
       {errorMsg && <div className="ob-error">⚠️ {errorMsg}</div>}
@@ -172,9 +140,86 @@ const CheckoutForm = ({ bumpAdded, total }: { bumpAdded: boolean; total: string 
         {loading ? "PAIEMENT EN COURS…" : `☠️ PAYER ${total} ET ACCÉDER MAINTENANT`}
       </button>
       <div className="ob-secure-note">
-        🔒 Paiement 100% sécurisé via Stripe · Accès immédiat après paiement
+        🔒 Paiement 100% sécurisé via Stripe · Carte & Klarna disponibles
       </div>
     </form>
+  );
+};
+
+const CheckoutSection = ({ bumpAdded, total }: { bumpAdded: boolean; total: string }) => {
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [piError, setPiError] = useState<string | null>(null);
+  const [prenom, setPrenom] = useState("");
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    setClientSecret(null);
+    setPiError(null);
+    const amount = bumpAdded ? 14400 : 9700;
+    fetch(PI_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: PI_AUTH,
+      },
+      body: JSON.stringify({
+        amount,
+        bump: bumpAdded,
+        payment_method_types: ["card", "klarna"],
+      }),
+    })
+      .then(async (r) => {
+        if (!r.ok) throw new Error(await r.text());
+        return r.json();
+      })
+      .then((data) => {
+        const cs = data.clientSecret || data.client_secret;
+        if (!cs) throw new Error("Réponse invalide du serveur.");
+        setClientSecret(cs);
+      })
+      .catch((err) => {
+        setPiError(err?.message || "Impossible d'initialiser le paiement.");
+      });
+  }, [bumpAdded]);
+
+  if (piError) {
+    return <div className="ob-error">⚠️ {piError}</div>;
+  }
+
+  if (!clientSecret) {
+    return (
+      <div className="ob-pay-form" style={{ textAlign: "center", color: "#888" }}>
+        Chargement du paiement…
+      </div>
+    );
+  }
+
+  return (
+    <Elements
+      key={clientSecret}
+      stripe={stripePromise}
+      options={{
+        clientSecret,
+        appearance: {
+          theme: "night",
+          variables: {
+            colorPrimary: "#a78bfa",
+            colorBackground: "#0f0f0f",
+            colorText: "#f2ead8",
+            fontFamily: "'DM Sans', sans-serif",
+          },
+        },
+      }}
+    >
+      <PaymentForm
+        bumpAdded={bumpAdded}
+        total={total}
+        prenom={prenom}
+        setPrenom={setPrenom}
+        email={email}
+        setEmail={setEmail}
+      />
+    </Elements>
   );
 };
 
@@ -314,9 +359,7 @@ const Orderbump = () => {
           <div className="ob-order-line total"><span>TOTAL</span><span className="price">{total}</span></div>
         </div>
 
-        <Elements stripe={stripePromise}>
-          <CheckoutForm bumpAdded={bumpAdded} total={total} />
-        </Elements>
+        <CheckoutSection bumpAdded={bumpAdded} total={total} />
       </div>
     </div>
   );
